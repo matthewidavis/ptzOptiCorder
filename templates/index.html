@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>ptzOpticorder</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <h2>ptzOpticorder</h2>
+            <ul>
+                <li>
+                    <a href="#camera-management-tab" class="tab-link" onclick="showTab('camera-management-tab')">
+                        Camera Management
+                    </a>
+                </li>
+                <li>
+                    <a href="#events-tab" class="tab-link" onclick="showTab('events-tab')">
+                        Events
+                    </a>
+                </li>
+                <li>
+                    <a href="#stream-scheduling-tab" class="tab-link" onclick="showTab('stream-scheduling-tab')">
+                        Stream Scheduling
+                    </a>
+                </li>
+                <li>
+                    <a href="#recording-settings-tab" class="tab-link" onclick="showTab('recording-settings-tab')">
+                        Recording Settings
+                    </a>
+                </li>
+                <li>
+                    <a href="#recording-controls-tab" class="tab-link" onclick="showTab('recording-controls-tab')">
+                        Recording Controls
+                    </a>
+                </li>
+                <li>
+                    <a href="#video-management-tab" class="tab-link" onclick="showTab('video-management-tab')">
+                        Video Management
+                    </a>
+                </li>
+                <li>
+                    <a href="#highlights-tab" class="tab-link" onclick="showTab('highlights-tab')">
+                        Highlights
+                    </a>
+                </li>
+                <li>
+                    <a href="#triggers-tab" class="tab-link" onclick="showTab('triggers-tab')">
+                        Triggers
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Camera Management Section -->
+            <div id="camera-management-tab" class="tab-content">
+                <h2>Camera Management</h2>
+                <form id="add-camera-form">
+                    <!-- Hidden input for camera ID (used for editing) -->
+                    <input type="hidden" id="camera-id" value="">
+
+                    <input type="text" id="camera-name" placeholder="Camera Name" required>
+                    <input type="url" id="camera-uri" placeholder="RTSP URI" required>
+                    <!-- We'll dynamically change the button text based on add vs. edit -->
+                    <button type="submit" id="camera-form-btn">Add Stream</button>
+                </form>
+
+                <ul id="camera-list"></ul> <!-- List of Cameras -->
+            </div>
+
+            <!-- Events Section -->
+            <div id="events-tab" class="tab-content" style="display:none;">
+                <h2>Events</h2>
+
+                <!-- Form to add or edit events -->
+                <form id="add-event-form" style="display:flex; flex-wrap:wrap; gap:10px;">
+                    <input type="hidden" id="event-id" value="" />
+                    
+                    <div style="flex:1; min-width:200px;">
+                        <label for="event-name">Event Name:</label>
+                        <input type="text" id="event-name" placeholder="Event Name" required>
+                    </div>
+                    
+                    <div style="flex:1; min-width:200px;">
+                        <label for="event-start">Start Time:</label>
+                        <input type="datetime-local" id="event-start" required>
+                    </div>
+
+                    <div style="flex:1; min-width:200px;">
+                        <label for="event-end">Stop Time:</label>
+                        <input type="datetime-local" id="event-end" required>
+                    </div>
+
+                    <!-- Image upload for the event (optional) -->
+                    <div style="flex:1; min-width:200px;">
+                        <label for="event-image">Upload Image (optional):</label>
+                        <input type="file" id="event-image" accept="image/*">
+                    </div>
+
+                    <button type="submit" id="save-event-btn" style="height:40px; align-self:flex-end;">
+                        Add Event
+                    </button>
+                </form>
+
+                <hr>
+
+                <!-- SINGLE ROW for heading + export/import buttons -->
+                <div class="events-header-row">
+                    <!-- We attach an ID here so we can inject current date/time in JavaScript -->
+                    <h3 class="events-heading" id="events-title">Scheduled Events</h3>
+
+                    <!-- Button group for export/import -->
+                    <div class="events-button-group">
+                        <button id="export-csv-btn">Export CSV</button>
+                        <button id="export-json-btn">Export JSON</button>
+                        <button id="export-pdf-btn">Export PDF</button>
+                        <button id="export-ics-btn">Export iCal</button>
+
+                        <!-- Import File Inputs (hidden) for CSV/JSON -->
+                        <input type="file" id="import-csv-file" accept=".csv" style="display:none;" />
+                        <input type="file" id="import-json-file" accept=".json" style="display:none;" />
+
+                        <button id="import-csv-btn">Import CSV</button>
+                        <button id="import-json-btn">Import JSON</button>
+                    </div>
+                </div>
+
+                <!-- NEW: Search & Sort Controls for events -->
+                <div class="events-filters" style="display:flex; gap:10px; margin-bottom:10px;">
+                    <input type="text" id="events-search" placeholder="Search events..."/>
+                    
+                    <select id="events-sort-field">
+                        <option value="start">Start Date</option>
+                        <option value="end">End Date</option>
+                        <option value="name">Event Title</option>
+                        <option value="duration">Duration</option>
+                    </select>
+
+                    <select id="events-sort-order">
+                        <option value="asc">Ascending</option>
+                        <option value="desc">Descending</option>
+                    </select>
+                </div>
+
+                <ul id="events-list"></ul> <!-- List of events -->
+            </div>
+
+            <!-- Stream Scheduling Section -->
+            <div id="stream-scheduling-tab" class="tab-content" style="display:none;">
+                <h2>Stream Scheduling</h2>
+
+                <!-- Option to choose manual times or use events -->
+                <div style="display: flex; align-items:center; gap: 10px; margin-bottom: 15px;">
+                    <label>
+                        <input type="radio" name="scheduling-mode" id="mode-manual" checked>
+                        Manual Start/Stop
+                    </label>
+                    <label>
+                        <input type="radio" name="scheduling-mode" id="mode-events">
+                        Use Events (higher priority)
+                    </label>
+                </div>
+
+                <!-- If manual, show the old scheduling form -->
+                <form id="schedule-stream-form">
+                    <select id="select-stream">
+                        <option value="">Select Stream</option>
+                        <!-- Options will be populated dynamically -->
+                    </select>
+                    <input type="datetime-local" id="schedule-time" required>
+                    <button type="submit">Schedule Recording</button>
+                </form>
+                <ul id="scheduled-recordings-list"></ul> <!-- Scheduled recordings list -->
+
+                <!-- If use events, show a multi-select of events that can be chosen to record -->
+                <div id="event-based-scheduling" style="display:none; margin-top:20px;">
+                    <select id="select-events" multiple size="5" style="width:100%;">
+                        <!-- List of events will be populated here -->
+                    </select>
+                    <button type="button" id="schedule-events-btn">Schedule Using Events</button>
+                </div>
+            </div>
+
+            <!-- Recording Settings Section -->
+            <div id="recording-settings-tab" class="tab-content" style="display:none;">
+                <h2>Recording Settings</h2>
+
+                <!-- Global Settings -->
+                <div>
+                    <h3>Global Settings</h3>
+                    <label for="global-format">Global Format:</label>
+                    <select id="global-format">
+                        <option value="mp4">MP4</option>
+                        <option value="mkv">MKV</option>
+                    </select>
+
+                    <label for="global-location">Global Location:</label>
+                    <input type="file" id="global-location" webkitdirectory style="display:none;" />
+                    <input type="text" id="global-location-text" placeholder="Set location" value="./recordings/">
+                    <button type="button" id="browse-location-btn">Browse</button>
+
+                    <label for="global-segment">Global Segmentation (minutes):</label>
+                    <input type="number" id="global-segment" placeholder="Duration in minutes" value="10">
+                </div>
+
+                <hr>
+
+                <!-- Individual Camera Settings (Accordion) -->
+                <div>
+                    <h3>Individual Camera Settings</h3>
+                    <ul id="camera-settings-list"></ul>
+                </div>
+            </div>
+
+            <!-- Recording Controls Section (Start/Stop) -->
+            <div id="recording-controls-tab" class="tab-content" style="display:none;">
+                <h2>Recording Controls</h2>
+                <ul id="recording-controls"></ul> <!-- Buttons for Start/Stop recording -->
+            </div>
+
+            <!-- Video Management Section -->
+            <div id="video-management-tab" class="tab-content" style="display:none;">
+                <h2>Recorded Videos</h2>
+                <ul id="recorded-videos"></ul> <!-- List of recorded videos -->
+            </div>
+
+            <!-- Highlights Section -->
+            <div id="highlights-tab" class="tab-content" style="display:none;">
+                <h2>Highlights</h2>
+                <ul id="highlights-list">
+                    <!-- Highlights will be displayed here -->
+                </ul>
+            </div>
+
+            <!-- Triggers Section -->
+            <div id="triggers-tab" class="tab-content" style="display:none;">
+                <h2>Triggers</h2>
+                <button>Trigger 1</button>
+                <button>Trigger 2</button>
+                <button>Trigger 3</button>
+                <button>Trigger 4</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 1) events.js (if you have it) -->
+    <script src="{{ url_for('static', filename='js/events.js') }}"></script>
+    <!-- 2) camera.js -->
+    <script src="{{ url_for('static', filename='js/camera.js') }}"></script>
+    <!-- 3) recordings.js -->
+    <script src="{{ url_for('static', filename='js/recordings.js') }}"></script>
+    <!-- 4) app.js (main) -->
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
