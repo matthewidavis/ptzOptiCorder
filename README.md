@@ -1,4 +1,5 @@
 ## Left off on Stream Scheduling ##
+## [IDEA] add camera group, location, etc. for easier identification & sorting ##
 ## [IDEA] motion detection ##
 ## [IDEA] preset recall with stream start / stop ##
 ## [IDEA] preview enlarge with PTZF and Preset Controls ##
