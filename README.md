@@ -1,8 +1,8 @@
 ## Left off on Stream Scheduling ##
-## motion detection ##
-## preset recall with stream start / stop ##
-## preview enlarge with PTZF and Preset Controls ##
-## Dropbox \ GDrive support ##
+## [IDEA] motion detection ##
+## [IDEA] preset recall with stream start / stop ##
+## [IDEA] preview enlarge with PTZF and Preset Controls ##
+## [IDEA] Dropbox \ GDrive support ##
 
 <img width="950" alt="image" src="https://github.com/user-attachments/assets/e58d5e3b-9c91-4245-a53f-299828335cd9" />
 <img width="949" alt="image" src="https://github.com/user-attachments/assets/cd3ac408-1a99-425b-bb47-4aecff04ddff" />
