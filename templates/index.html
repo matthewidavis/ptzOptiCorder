@@ -67,7 +67,7 @@
                     <input type="text" id="camera-name" placeholder="Camera Name" required>
                     <input type="url" id="camera-uri" placeholder="RTSP URI" required>
                     <!-- We'll dynamically change the button text based on add vs. edit -->
-                    <button type="submit" id="camera-form-btn">Add Stream</button>
+                    <button type="submit" id="camera-form-btn">Add Camera</button>
                 </form>
 
                 <ul id="camera-list"></ul> <!-- List of Cameras -->
@@ -248,13 +248,12 @@
         </div>
     </div>
 
-    <!-- 1) events.js (if you have it) -->
     <script src="{{ url_for('static', filename='js/events.js') }}"></script>
-    <!-- 2) camera.js -->
+    <script src="{{ url_for('static', filename='js/rtspmanager.js') }}"></script>
     <script src="{{ url_for('static', filename='js/camera.js') }}"></script>
-    <!-- 3) recordings.js -->
     <script src="{{ url_for('static', filename='js/recordings.js') }}"></script>
-    <!-- 4) app.js (main) -->
     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+    
+    
 </body>
 </html>
