@@ -1,5 +1,3 @@
-// camera.js
-
 window.camera = (function() {
   // Module-scoped data
   let streams = [
@@ -10,6 +8,7 @@ window.camera = (function() {
   let previewIntervals = {};    // For live preview intervals
   let statsIntervals = {};      // For periodic stats updates
   let pausedPreviews = {};      // { streamId: boolean }
+  let statsFetching = {};       // Object to track stats fetching per stream
   let globalSettings = null;    // Set by app.js
 
   // DOM references for the camera form
@@ -174,7 +173,7 @@ window.camera = (function() {
         <div class="camera-info">
           <span class="camera-title">${stream.name}</span>
           <span class="camera-uri">${stream.uri}</span>
-          <div class="camera-stats" id="stats-content-${stream.id}" style="display: none;"></div>
+          <div class="camera-stats" id="stats-content-${stream.id}" style="display: none;"></div> <!-- Stats panel hidden by default -->
         </div>
       `;
       // CENTER column: Live Preview (clickable to pause/resume)
@@ -190,7 +189,7 @@ window.camera = (function() {
         <div class="camera-actions">
           <button onclick="camera.editCamera(${stream.id})">Edit</button>
           <button onclick="camera.removeStream(${stream.id})">Remove</button>
-          <button onclick="camera.toggleStats(${stream.id})">Stats</button>
+          <button onclick="camera.toggleStats(${stream.id})">Stats</button> <!-- Stats button to toggle visibility -->
         </div>
       `;
       listItem.innerHTML = leftCol + midCol + rightCol;

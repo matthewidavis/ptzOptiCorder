@@ -166,25 +166,55 @@
                     </label>
                 </div>
 
-                <!-- If manual, show the old scheduling form -->
+                <!-- Manual Scheduling Form -->
                 <form id="schedule-stream-form">
-                    <select id="select-stream">
-                        <option value="">Select Stream</option>
-                        <!-- Options will be populated dynamically -->
-                    </select>
-                    <input type="datetime-local" id="schedule-time" required>
+                    <div>
+                        <label for="schedule-time">Start Time:</label>
+                        <input type="datetime-local" id="schedule-time" required>
+                    </div>
+                    <div>
+                        <label for="schedule-end-time">End Time:</label>
+                        <input type="datetime-local" id="schedule-end-time" required>
+                    </div>
+                    <div>
+                        <label for="select-stream">Select Stream(s):</label>
+                        <select id="select-stream" multiple>
+                            <!-- Options will be populated dynamically by camera.js -->
+                        </select>
+                    </div>
                     <button type="submit">Schedule Recording</button>
                 </form>
-                <ul id="scheduled-recordings-list"></ul> <!-- Scheduled recordings list -->
 
-                <!-- If use events, show a multi-select of events that can be chosen to record -->
-                <div id="event-based-scheduling" style="display:none; margin-top:20px;">
-                    <select id="select-events" multiple size="5" style="width:100%;">
-                        <!-- List of events will be populated here -->
-                    </select>
-                    <button type="button" id="schedule-events-btn">Schedule Using Events</button>
+                <h3>Scheduled Recordings</h3>
+                <ul id="scheduled-recordings-list">
+                    <!-- Scheduled recordings list will be displayed here -->
+                </ul>
+
+                <!-- Modify existing scheduled recordings (Management Section) -->
+                <div id="recording-management" style="margin-top: 20px;">
+                    <h3>Manage Scheduled Recordings</h3>
+                    <div class="recording-filters">
+                        <label for="filter-cameras">Filter by Camera:</label>
+                        <select id="filter-cameras">
+                            <option value="">All Cameras</option>
+                            <!-- Camera options will be populated dynamically -->
+                        </select>
+
+                        <label for="sort-recordings">Sort by:</label>
+                        <select id="sort-recordings">
+                            <option value="start-time">Start Time</option>
+                            <option value="end-time">End Time</option>
+                        </select>
+                        <button id="apply-filters-btn">Apply Filters</button>
+                    </div>
+
+                    <ul id="scheduled-recordings-list">
+                        <!-- Each scheduled recording will have Edit and Delete buttons -->
+                        <!-- Modify button will be implemented in app.js -->
+                    </ul>
                 </div>
             </div>
+
 
             <!-- Recording Settings Section -->
             <div id="recording-settings-tab" class="tab-content" style="display:none;">
