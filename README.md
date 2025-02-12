@@ -5,7 +5,7 @@
 ## [IDEA] preview enlarge with PTZF and Preset Controls ##
 ## [IDEA] Dropbox \ GDrive support ##
 
-<img width="950" alt="image" src="https://github.com/user-attachments/assets/e58d5e3b-9c91-4245-a53f-299828335cd9" />
+<img width="947" alt="image" src="https://github.com/user-attachments/assets/f746bbe7-478e-4106-95a9-4937b1bf3e1a" />
 <img width="949" alt="image" src="https://github.com/user-attachments/assets/cd3ac408-1a99-425b-bb47-4aecff04ddff" />
 <img width="948" alt="image" src="https://github.com/user-attachments/assets/bd397d96-6897-4218-b24a-4a82025bf3e0" />
 <img width="950" alt="image" src="https://github.com/user-attachments/assets/00351ab9-bb2e-4d78-adcb-e5117e829445" />
